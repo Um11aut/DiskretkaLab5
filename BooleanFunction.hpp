@@ -83,30 +83,54 @@ public:
 	}
 
 	void printGegalkin() {
-		std::string result = "";
+		std::vector<int> arr;
+
+		for (const auto& element : m_value) {
+			arr.push_back(static_cast<int>(element - '0'));
+		}
+
+		for (const auto& el : arr) {
+			std::cout << el << ' ';
+		}
+
+		std::cout << std::endl;
+
+		paskalTriangle(arr, m_gekalginResult);
+		std::cout << std::endl;
+		std::cout << std::endl;
+		std::cout << std::endl;
 
 		size_t index = 0;
+
+		for (const auto& el : m_gekalginResult) {
+			std::cout << el << ' ';
+		}
+		std::cout << std::endl;
+
+		std::vector<std::string> result;
 
 		for (int x = 0; x <= 1; ++x) {
 			for (int y = 0; y <= 1; ++y) {
 				for (int z = 0; z <= 1; ++z) {
-					if (m_value[index] == '1') {
-						result += "(";
-						std::string part = "";
+					if (x == 0 && y == 0 && z == 0) result.push_back("1");
 
-						if (x == 0) { part += "(x XOR 1)Ʌ"; } else { part += "xɅ"; }
-						if (y == 0) { part += "(y XOR 1)Ʌ"; } else { part += "yɅ"; }
-						if (z == 0) { part += "(z XOR 1)Ʌ"; } else { part += "zɅ"; }
-						
-						result += part;
-						result += ")XOR";
-						
-					}
+					std::string temp;
+
+					if (x == 1) temp += "x";
+					if (y == 1) temp += "y";
+					if (z == 1) temp += "z";
+
+					if (temp.size() > 1) m_isLinear = false;
+
+					if (!temp.empty() && m_gekalginResult[index] == 1) result.push_back(temp);
 					index++;
 				}
 			}
 		}
-		std::cout << result;
+
+		for (const auto& el : result) {
+			std::cout << el << " + ";
+		}
 	}
 
 	void printDKNF() {
@@ -191,35 +215,7 @@ public:
 	}
 
 	bool isLinear() {
-		size_t index = 0;
-
-		std::vector<std::string> result;
-
-		for (int x = 0; x <= 1; ++x) {
-			for (int y = 0; y <= 1; ++y) {
-				for (int z = 0; z <= 1; ++z) {
-					if (m_value[index] == '1') {
-						if (x == 0 && y == 0 && z == 0) result.push_back("1");
-
-						std::string temp;
-
-						if (x == 1) temp += "x";
-						if (y == 1) temp += "y";
-						if (z == 1) temp += "z";
-
-						if (temp.size() > 1) return false;
-
-						if(!temp.empty()) result.push_back(temp);
-					}
-					index++;
-				}
-			}
-		}
-
-		for (const auto& el : result) {
-			std::cout << el << " + ";
-		}
-		return true;
+		return m_isLinear;
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const BooleanFunction& func) {
@@ -228,6 +224,23 @@ public:
 		return os;
 	}
 private:
+
+	void paskalTriangle(std::vector<int>& arr, std::vector<int>& result) {
+		std::vector<int> temp;
+
+		for (size_t i = 0; i < arr.size() - 1; ++i) {
+			temp.push_back(arr[i] ^ arr[i+1]);
+		}
+
+		for (const auto& el : temp) {
+			std::cout << el << ' ';
+		}
+
+		std::cout << std::endl;
+		
+		result.push_back(arr[0]);	
+		if (arr.size() != 1) paskalTriangle(temp, result);
+	}
 
 	inline void reverse() {
 		std::reverse(m_value.begin(), m_value.end());
@@ -247,4 +260,7 @@ private:
 	}
 
 	std::string m_value;
+	std::vector<int> m_gekalginResult;
+
+	bool m_isLinear = true;
 };

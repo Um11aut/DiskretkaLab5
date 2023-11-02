@@ -3,7 +3,7 @@
 
 int main()
 {
-    BooleanFunction func{"00010111"};
+    BooleanFunction func{"10100110"};
 
     func.print();
     func.printDDNF();
