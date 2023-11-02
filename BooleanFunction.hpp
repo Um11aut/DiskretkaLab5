@@ -94,21 +94,18 @@ public:
 						result += "(";
 						std::string part = "";
 
-						if (x == 0) { part += " (x XOR 1) Ʌ "; } else { part += " x Ʌ  "; }
-						if (y == 0) { part += " (y XOR 1) Ʌ "; } else { part += " y Ʌ  "; }
-						if (z == 0) { part += " (z XOR 1) Ʌ "; } else { part += " z Ʌ  "; }
+						if (x == 0) { part += "(x XOR 1)Ʌ"; } else { part += "xɅ"; }
+						if (y == 0) { part += "(y XOR 1)Ʌ"; } else { part += "yɅ"; }
+						if (z == 0) { part += "(z XOR 1)Ʌ"; } else { part += "zɅ"; }
 						
-						part = part.substr(0, part.length() - 4);
-
 						result += part;
-						result += ") XOR ";
+						result += ")XOR";
 						
 					}
 					index++;
 				}
 			}
 		}
-		result = result.substr(0, result.length() - 4);
 		std::cout << result;
 	}
 
@@ -166,8 +163,7 @@ public:
 	}
 
 	bool isMonotonic() {
-		size_t index = 0;
-
+		size_t value_index = 0;
 		for (int x = 0; x <= 1; ++x) {
 			for (int y = 0; y <= 1; ++y) {
 				for (int z = 0; z <= 1; ++z) {
@@ -175,17 +171,18 @@ public:
 					std::string base = std::to_string(x) + std::to_string(y) + std::to_string(z);
 
 					for (size_t i = 0; i < base.size(); ++i) {
-						if (base[i] == '0') {
+						if (base[i] == '0' && m_value[value_index] == '1') {
+							std::string base_cpy = base;
 							int el = base[i] - '0';
-							base[i] = (char)(++el + '0');
+							base_cpy[i] = static_cast<char>(el + 1 + '0');
 
-							if (m_value[binaryToDecimal(base)] - '0' < m_value[index] - '0' && m_value[binaryToDecimal(base)] == '1') {
+							auto index = binaryToDecimal(base_cpy);
+
+							if ((static_cast<int>(m_value[index] - '0')) < (static_cast<int>(m_value[binaryToDecimal(base)] - '0')) && m_value[index] == '0')
 								return false;
-							}
 						}
 					}
-
-					index++;
+					++value_index;
 				}
 			}
 		}

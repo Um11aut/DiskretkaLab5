@@ -16,7 +16,6 @@ int main()
 
     auto temp = func.findDouble();
 
-
     if (func.remainsConstant(true)) {
         std::cout << "зберігає константу 1" << std::endl;
     }
